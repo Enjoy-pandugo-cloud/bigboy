@@ -1,51 +1,56 @@
-# IndiaCodex 2025
+# Crewai Gmail Draft Creator Agent — Hackathon MVP
 
+This repository is a hackathon-ready MVP that combines a CrewAI agent (for Gmail drafts and general queries) with a Cardano Preprod payment gate. The flow: user connects a wallet on the frontend, pays a small ADA amount on Preprod, then the backend verifies the transaction via Blockfrost and runs the AI agent to produce a result (draft, summary, reply). A mock NFT certificate is produced as a bonus.
 
-Welcome to [**IndiaCodex'25 Hackathon**](https://www.indiacodex.com) powered by [**Nucast Labs**](https://nucast.io/)
-Please find attached the rules and steps to submit your project for the hackathon :
+Repository: git@github.com:Enjoy-pandugo-cloud/bigboy.git
 
-## Step - 1: Fork the repository
+Note: the Masumi repository was used to generate the initial template for this project.
 
-Fork the given repository to your GitHub profile.
+## Quick setup (Windows PowerShell)
 
+1. Copy environment variables:
 
-## Step - 2: Create your folder
+```powershell
+copy .\.env.example .\.env
+# then edit .env and fill in BLOCKFROST_API_KEY, OPENAI_API_KEY and SELLER_ADDRESS (preprod address)
+```
 
-After forking the repository, clone the repository to your pc/desktop, and then create a folder with your **TeamName** as the folder name.
+2. Backend (Python) - create venv and install deps:
 
-Unclear about cloning? No problem, we've got your back. Click [here](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) to learn about it.
+```powershell
+python -m venv .venv; .\.venv\Scripts\Activate.ps1
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-## Step - 3: Project Code Base
+3. Start backend API (port 8000):
 
-Push Your code base in this folder.
-This should include all your files for frontend as well as the backend
+```powershell
+python main.py api
+```
 
-## Step - 4: Team Info and Project Info
+4. Frontend (Next.js) - install and run (port 3001):
 
-In your **TeamName** folder, make sure to include the below details in the README.md:
+```powershell
+cd frontend
+npm install
+npm run dev
+```
 
-1. Your Project
-2. Your Project's Description
-3. What problem you are trying to solve
-4. Tech Stack used while building the project
-5. Project Demo Photos, Videos
-6. If your project is deployed, then include the Live Project Link
-7. Your PPT link (Make sure to upload the PPT in this folder along with the project)
-8. Your Team Members' Info.
+5. Wallet & payment flow (frontend):
 
-## Step - 5: Submitting the code: Making a Pull request
+- Connect a Preprod wallet (Begin, Nami, or Yoroi on Preprod). Ensure your wallet is funded with Preprod ADA (faucet).
+- Enter your query and initiate the payment. The frontend will create and submit a transaction sending the configured lovelace amount to `SELLER_ADDRESS` and return the txHash.
+- The backend accepts `POST /start_job` to create a job, then the frontend or caller should `POST /submit_tx?job_id=...&tx_hash=...` to confirm payment.
 
-After you have pushed your files and code base,
-[create an issue](https://github.com/IndiaCodex/IndiaCodex-2025/issues) in the main repository as:
+## Notes & Implementation Details
 
-- Issue: Team Name: Submission
-- Issue description should include a small glimpse of your project, what is it doing, and how are you trying to achieve it.
+- Payments: Backend verifies tx outputs with Blockfrost Preprod using `BLOCKFROST_API_KEY` and `cardano_payments.verify_transaction_pay_to_address`.
+- Agent: CrewAI-based crew in `crew_definition.py` exposes research, summarization, and reply tasks. The Gmail tool is in `gmail_tool.py` and uses Google API credentials (`credentials.json`) to create drafts.
+- NFT: `cardano_nft.py` currently provides a mock mint function; frontend has Lucid helpers for direct wallet-based minting as a later enhancement.
 
-After the issue is assigned, make a [Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request) from your forked repo to this repo's main branch while mentioning issue no. assigned to it.
+## Next steps I will perform (progress will be updated):
 
-## Guides and Rules for submission:
-
-1. Make sure you fork the repository first, and create a folder with your team name.
-2. Make all your code added to your forked repo, and then push the code to your main branch after your project is complete.
-3. Make sure to push files to your folder only.
-4. Changing or doing any edits to other folders is strictly prohibited.
+- Ensure backend runs without missing dependencies and add minor fixes.
+- Extend `gmail_tool.py` to provide a generalized agent interface for summaries and replies.
+- Wire up a minimal frontend page to connect wallet, call `/start_job`, perform payment via Lucid, then call `/submit_tx` and display the result.

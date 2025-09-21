@@ -55,8 +55,11 @@ npm run dev
 - Extend `gmail_tool.py` to provide a generalized agent interface for summaries and replies.
 - Wire up a minimal frontend page to connect wallet, call `/start_job`, perform payment via Lucid, then call `/submit_tx` and display the result.
 
+## PPT on the project 
+- ("https://drive.google.com/file/d/1Gz3338sAhH-zPjfxIClSjSZvq6yxLref/view?usp=sharing")
 
 ## Contact
 - archlinuxadithya@gmail.com
-- Team Leader - Adithya
+- Team Leader - Adithya Srivatsa
 - Members - Chetan and Varshith
+

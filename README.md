@@ -61,5 +61,8 @@ npm run dev
 ## Contact
 - archlinuxadithya@gmail.com
 - Team Leader - Adithya Srivatsa
-- Members - Chetan and Varshith
+- Members - Chetan, Yekeshwar Naik, Sri Krishna Teja and Varshith
+
+- illu em cheyale, motham nene chesa - Adithya.. hahahahaha
+
 

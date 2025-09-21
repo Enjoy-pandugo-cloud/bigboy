@@ -54,3 +54,9 @@ npm run dev
 - Ensure backend runs without missing dependencies and add minor fixes.
 - Extend `gmail_tool.py` to provide a generalized agent interface for summaries and replies.
 - Wire up a minimal frontend page to connect wallet, call `/start_job`, perform payment via Lucid, then call `/submit_tx` and display the result.
+
+
+## Contact
+- archlinuxadithya@gmail.com
+- Team Leader - Adithya
+- Members - Chetan and Varshith
